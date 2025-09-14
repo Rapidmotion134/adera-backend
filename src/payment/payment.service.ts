@@ -18,7 +18,16 @@ export class PaymentService {
   }
 
   findAll() {
-    return this.paymentRepository.find();
+    return this.paymentRepository.find({
+      relations: { user: true },
+    });
+  }
+
+  findAllForUser(userId: number) {
+    return this.paymentRepository.find({
+      relations: ['users'],
+      where: { user: { id: userId } },
+    });
   }
 
   findOne(id: number) {

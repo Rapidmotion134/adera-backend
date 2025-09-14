@@ -33,10 +33,8 @@ export class UserService {
         lastName: 'Oumer',
         password: 'Test123',
         phone: '+251939881843',
-        email: 'meen.oumer@gmail.com',
-        address1: 'Addis Ababa',
-        city: 'Addis Ababa',
-        zipcode: '20002',
+        email: 'ameen.oumer@gmail.com',
+        address: 'Addis Ababa',
         isAdmin: false,
       });
       await this.userRepo.save(user);
@@ -50,9 +48,7 @@ export class UserService {
         password: 'Test123',
         phone: '+251983354391',
         email: 'benyamassegdw@gmail.com',
-        address1: 'Addis Ababa',
-        city: 'Addis Ababa',
-        zipcode: '20002',
+        address: 'Addis Ababa',
         isAdmin: true,
       });
       await this.userRepo.save(adminUser);
@@ -68,9 +64,7 @@ export class UserService {
         password: 'superTest123',
         phone: '+251983354391',
         email: 'benyamassegdw1@gmail.com',
-        address1: 'Addis Ababa',
-        city: 'Addis Ababa',
-        zipcode: '20002',
+        address: 'Addis Ababa',
         isAdmin: true,
         isSuperAdmin: true,
       });

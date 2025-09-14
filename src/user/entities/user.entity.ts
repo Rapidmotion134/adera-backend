@@ -2,13 +2,12 @@ import {
   BeforeInsert,
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Document } from '../../document/entities/document.entity';
+import { Payment } from '../../payment/entities/payment.entity';
 // import { Service } from 'src/services/entities/service.entity';
 // import { Order } from '../../order/entities/order.entity';
 // import { Notification } from '../../notification/entities/notification.entity';
@@ -33,22 +32,10 @@ export class User {
   phone: string;
 
   @Column('text', { nullable: true })
-  address1: string;
-
-  @Column('text', { nullable: true })
-  city: string;
-
-  @Column('text', { nullable: true })
-  zipcode: string;
+  address: string;
 
   @Column('text')
   password: string;
-
-  @Column('text', { nullable: true })
-  dotNumber: string;
-
-  @Column('text', { nullable: true })
-  enc: string;
 
   @Column('boolean', { default: false })
   isAdmin: boolean;
@@ -72,9 +59,9 @@ export class User {
   @OneToMany(() => Document, (document) => document.user, { cascade: true })
   documents: Document[];
 
-  // @OneToMany(() => Invoice, (invoice) => invoice.user, { cascade: true })
-  // invoices: Invoice[];
-  //
+  @OneToMany(() => Payment, (payment) => payment.user, { cascade: true })
+  payments: Payment[];
+
   // @OneToMany(() => Request, (request) => request.user, { cascade: true })
   // requests: Request[];
   //

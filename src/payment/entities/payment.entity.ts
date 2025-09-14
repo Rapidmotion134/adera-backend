@@ -2,11 +2,11 @@ import {
   BeforeInsert,
   Column,
   Entity,
-  // JoinColumn,
-  // ManyToOne,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-// import { User } from '../../user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity('payment')
 export class Payment {
@@ -18,6 +18,12 @@ export class Payment {
 
   @Column('text', { nullable: true })
   type: string;
+
+  @Column('int')
+  stripeAmount: number;
+
+  @Column('int')
+  amount: number;
 
   @Column('text', { unique: true })
   productId: string;
@@ -31,9 +37,9 @@ export class Payment {
   @Column('boolean', { default: 'false' })
   isPaid: boolean;
 
-  // @ManyToOne(() => User, (user) => user.payment, { onDelete: 'CASCADE' })
-  // @JoinColumn({ name: 'user_id' })
-  // user: User;
+  @ManyToOne(() => User, (user) => user.payments, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @BeforeInsert()
   async generateUniqueCode() {
