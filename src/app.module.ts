@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PaymentModule } from './payment/payment.module';
 import { PageModule } from './page/page.module';
+import { UploadController } from './upload/upload.controller';
 
 @Module({
   imports: [
@@ -36,7 +37,7 @@ import { PageModule } from './page/page.module';
     PaymentModule,
     PageModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, UploadController],
   providers: [AppService],
 })
 export class AppModule {}

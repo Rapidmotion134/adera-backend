@@ -23,20 +23,8 @@ export class Document {
   @Column('text', { unique: true })
   productId: string;
 
-  @Column('boolean', { default: false })
-  isExpiring: boolean;
-
   @Column('date', { default: () => 'CURRENT_TIMESTAMP' })
-  issueDate: Date;
-
-  @Column('date', {
-    default: new Date(
-      new Date().getFullYear() + 1,
-      new Date().getMonth(),
-      new Date().getDay(),
-    ),
-  })
-  expiryDate: Date;
+  date: Date;
 
   @Column('boolean', { default: false })
   isRequested: boolean;

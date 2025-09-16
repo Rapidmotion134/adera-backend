@@ -25,7 +25,7 @@ export class PaymentService {
 
   findAllForUser(userId: number) {
     return this.paymentRepository.find({
-      relations: ['users'],
+      relations: ['user'],
       where: { user: { id: userId } },
     });
   }

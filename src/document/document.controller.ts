@@ -6,9 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  // HttpException,
-  // HttpStatus,
-  // Query,
   Req,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -22,43 +19,26 @@ import { Role } from 'src/auth/enums/role.enum';
 export class DocumentController {
   constructor(private readonly documentService: DocumentService) {}
 
-  // @Roles(Role.Admin, Role.User)
-  // @Get('download')
-  // async getDownloadUrl(@Query('fileKey') fileKey: string) {
-  //   if (!fileKey) {
-  //     throw new HttpException('File key is required', HttpStatus.BAD_REQUEST);
-  //   }
-  //   const bucket = process.env.FILE_BUCKET;
-  //   const downloadUrl = await this.s3Service.generatePresignedUrl(
-  //     bucket,
-  //     fileKey,
-  //   );
-  //   return { downloadUrl };
-  // }
-
   @Roles(Role.Admin)
-  @Post()
-  create(@Body() createDocumentDto: CreateDocumentDto) {
-    return this.documentService.create(createDocumentDto);
+  @Post('user/:userId')
+  create(
+    @Body() createDocumentDto: CreateDocumentDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.documentService.create(createDocumentDto, +userId);
   }
 
-  @Roles(Role.Admin)
-  @Get('expiring')
-  expiringCount() {
-    return this.documentService.expiringCount();
+  @Roles(Role.User)
+  @Post('requested')
+  createForRequest(
+    @Body() createDocumentDto: CreateDocumentDto,
+    @Req() req: Request,
+  ) {
+    return this.documentService.createForRequest(
+      createDocumentDto,
+      req['user'].userId,
+    );
   }
-
-  @Roles(Role.Admin)
-  @Post('order')
-  createForOrder(@Body() createDocumentDto: CreateDocumentDto) {
-    return this.documentService.create(createDocumentDto);
-  }
-
-  // @Roles(Role.User)
-  // @Post('request')
-  // createForRequest(@Body() createDocumentDto: CreateDocumentDto) {
-  //   return this.documentService.fulfillRequest(createDocumentDto);
-  // }
 
   @Roles(Role.Admin)
   @Get()

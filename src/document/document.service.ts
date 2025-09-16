@@ -15,10 +15,10 @@ export class DocumentService {
     private readonly userRepo: Repository<User>,
   ) {}
 
-  async create(createDocumentDto: CreateDocumentDto) {
+  async create(createDocumentDto: CreateDocumentDto, userId: number) {
     let document = this.documentRepo.create(createDocumentDto);
     const user = await this.userRepo.findOneBy({
-      id: createDocumentDto.userId,
+      id: userId,
     });
     document.user = user;
     await this.userRepo.save(user);
@@ -33,43 +33,32 @@ export class DocumentService {
     return document;
   }
 
-  // async fulfillRequest(createDocumentDto: CreateDocumentDto) {
-  //   let document = this.documentRepo.create(createDocumentDto);
-  //   const request = await this.requestRepo.findOne({
-  //     where: { id: createDocumentDto.requestId },
-  //     relations: { user: true },
-  //   });
-  //   if (request.isDone) {
-  //     return request.document;
-  //   }
-  //   const users = await this.userRepo.find({
-  //     where: { isAdmin: true },
-  //   });
-  //   document.isRequested = true;
-  //   document.user = request.user;
-  //   document = await this.documentRepo.save(document);
-  //   request.document = document;
-  //   request.isDone = true;
-  //   await this.requestRepo.save(request);
-  //   users.forEach((user) => {
-  //     const notification = new Notification();
-  //     notification.item = document.id;
-  //     notification.title = 'New Document Received';
-  //     notification.description = `${document.title} for ${request.subject} is ready.`;
-  //     notification.user = user;
-  //     this.notificationRepo.save(notification);
-  //   });
-  //   return document;
-  // }
+  async createForRequest(createDocumentDto: CreateDocumentDto, userId) {
+    let document = this.documentRepo.create(createDocumentDto);
+    // const users = await this.userRepo.find({
+    //   where: { isAdmin: true },
+    // });
+    const user = await this.userRepo.findOneBy({
+      id: userId,
+    });
+    document.user = user;
+    document.isRequested = true;
+    document = await this.documentRepo.save(document);
+    // users.forEach((user) => {
+    //     const notification = new Notification();
+    //     notification.item = document.id;
+    //     notification.title = 'New Document Received';
+    //     notification.description = `${document.title} for ${request.subject} is ready.`;
+    //     notification.user = user;
+    //     this.notificationRepo.save(notification);
+    //   });
+    return document;
+  }
 
   async findAll() {
     return await this.documentRepo.find({
       relations: { user: true },
     });
-  }
-
-  async expiringCount() {
-    return await this.documentRepo.countBy({ isExpiring: true });
   }
 
   async findAllByUser(userId: number) {
@@ -102,10 +91,10 @@ export class DocumentService {
       relations: { user: true },
       where: { id },
     });
-    if (user.userId === existingDocument.user.id) {
-      existingDocument.isRead = true;
-      return this.documentRepo.save(existingDocument);
-    } else if (user.isAdmin && existingDocument.isRequested) {
+    if (
+      user.userId === existingDocument.user.id ||
+      (user.isAdmin && existingDocument.isRequested)
+    ) {
       existingDocument.isRead = true;
       return this.documentRepo.save(existingDocument);
     }
