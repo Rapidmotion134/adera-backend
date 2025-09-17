@@ -1,5 +1,5 @@
 import {
-  BeforeInsert,
+  // BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -16,22 +16,25 @@ export class Payment {
   @Column('text')
   title: string;
 
-  @Column('text', { nullable: true })
-  type: string;
-
   @Column('int')
   stripeAmount: number;
 
   @Column('int')
   amount: number;
 
-  @Column('text', { unique: true })
-  productId: string;
+  @Column('text')
+  bankName: string;
+
+  @Column('text')
+  bankAccount: string;
+
+  @Column('text')
+  accountName: string;
 
   @Column('date', { default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   url: string;
 
   @Column('boolean', { default: 'false' })
@@ -40,15 +43,4 @@ export class Payment {
   @ManyToOne(() => User, (user) => user.payments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
-
-  @BeforeInsert()
-  async generateUniqueCode() {
-    this.productId = this.generateHexValue();
-  }
-
-  generateHexValue() {
-    const timestamp = Date.now().toString(16).substring(0, 4);
-    const randomPart = Math.random().toString(16).substring(2, 8);
-    return `${timestamp}${randomPart}`;
-  }
 }

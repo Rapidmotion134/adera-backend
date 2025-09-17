@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,13 +25,21 @@ export class PaymentService {
 
   findAllForUser(userId: number) {
     return this.paymentRepository.find({
-      relations: ['user'],
+      relations: { user: true },
       where: { user: { id: userId } },
     });
   }
 
-  findOne(id: number) {
-    return this.paymentRepository.findOneBy({ id });
+  async findOne(id: number, user: any) {
+    const payment = await this.paymentRepository.findOne({
+      relations: { user: true },
+      where: { id },
+      cache: false, // Disable cache for the query
+    });
+    if (user.userId === payment.user.id || user.isAdmin) {
+      return payment;
+    }
+    return new UnauthorizedException();
   }
 
   async update(id: number, updatePaymentDto: UpdatePaymentDto) {

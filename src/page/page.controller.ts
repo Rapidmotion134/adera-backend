@@ -23,11 +23,13 @@ export class PageController {
     return this.pageService.create(createPageDto);
   }
 
+  @Roles(Role.Admin, Role.User)
   @Get()
   findAll() {
     return this.pageService.findAll();
   }
 
+  @Roles(Role.Admin, Role.User)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.pageService.findOne(+id);
