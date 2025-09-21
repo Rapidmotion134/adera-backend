@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Document } from './entities/document.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
+import { Notification } from 'src/notification/entities/notification.entity';
 
 @Injectable()
 export class DocumentService {
@@ -13,6 +14,8 @@ export class DocumentService {
     private readonly documentRepo: Repository<Document>,
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
+    @InjectRepository(Notification)
+    private readonly notificationRepo: Repository<Notification>,
   ) {}
 
   async create(createDocumentDto: CreateDocumentDto, userId: number) {
@@ -22,37 +25,42 @@ export class DocumentService {
     });
     document.user = user;
     await this.userRepo.save(user);
-    // const notification = new Notification();
-    // notification.date = new Date();
-    // notification.description = `${document.title} is ready.`;
-    // notification.title = 'New Document Received';
-    // notification.user = user;
+    const notification = new Notification();
+    notification.date = new Date();
+    notification.description = `${document.title} is ready.`;
+    notification.title = 'New Document Received';
+    notification.user = user;
     document = await this.documentRepo.save(document);
-    // notification.item = document.id;
-    // this.notificationRepo.save(notification);
+    notification.item = document.id;
+    this.notificationRepo.save(notification);
     return document;
   }
 
   async createForRequest(createDocumentDto: CreateDocumentDto, userId) {
     let document = this.documentRepo.create(createDocumentDto);
-    // const users = await this.userRepo.find({
-    //   where: { isAdmin: true },
-    // });
+    const users = await this.userRepo.find({
+      where: { isAdmin: true },
+    });
     const user = await this.userRepo.findOneBy({
       id: userId,
     });
     document.user = user;
     document.isRequested = true;
     document = await this.documentRepo.save(document);
-    // users.forEach((user) => {
-    //     const notification = new Notification();
-    //     notification.item = document.id;
-    //     notification.title = 'New Document Received';
-    //     notification.description = `${document.title} for ${request.subject} is ready.`;
-    //     notification.user = user;
-    //     this.notificationRepo.save(notification);
-    //   });
+    users.forEach((user) => {
+      const notification = new Notification();
+      notification.item = document.id;
+      notification.title = 'New Document Received';
+      notification.description = `${document.title} is ready.`;
+      notification.user = user;
+      this.notificationRepo.save(notification);
+    });
     return document;
+  }
+
+  upload(createDocumentDto: CreateDocumentDto) {
+    const document = this.documentRepo.create(createDocumentDto);
+    return this.documentRepo.save(document);
   }
 
   async findAll() {

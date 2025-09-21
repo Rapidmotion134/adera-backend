@@ -40,6 +40,12 @@ export class Payment {
   @Column('boolean', { default: 'false' })
   isPaid: boolean;
 
+  @Column('boolean', { default: 'false' })
+  isAccepted: boolean;
+
+  @Column('boolean', { default: 'false' })
+  isRejected: boolean;
+
   @ManyToOne(() => User, (user) => user.payments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;

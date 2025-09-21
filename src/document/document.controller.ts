@@ -28,6 +28,12 @@ export class DocumentController {
     return this.documentService.create(createDocumentDto, +userId);
   }
 
+  @Roles(Role.Admin)
+  @Post('upload')
+  upload(@Body() createDocumentDto: CreateDocumentDto) {
+    return this.documentService.upload(createDocumentDto);
+  }
+
   @Roles(Role.User)
   @Post('requested')
   createForRequest(

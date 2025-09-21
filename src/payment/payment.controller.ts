@@ -52,6 +52,18 @@ export class PaymentController {
     return this.paymentService.update(+id, updatePaymentDto);
   }
 
+  @Roles(Role.Admin, Role.User)
+  @Patch('accept/:id')
+  acceptPayment(@Param('id') id: string) {
+    return this.paymentService.acceptPayment(+id);
+  }
+
+  @Roles(Role.Admin, Role.User)
+  @Patch('reject/:id')
+  rejectPayment(@Param('id') id: string) {
+    return this.paymentService.rejectPayment(+id);
+  }
+
   @Roles(Role.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {

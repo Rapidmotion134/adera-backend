@@ -10,7 +10,7 @@ import { Document } from '../../document/entities/document.entity';
 import { Payment } from '../../payment/entities/payment.entity';
 // import { Service } from 'src/services/entities/service.entity';
 // import { Order } from '../../order/entities/order.entity';
-// import { Notification } from '../../notification/entities/notification.entity';
+import { Notification } from '../../notification/entities/notification.entity';
 // import { Invoice } from '../../invoice/entities/invoice.entity';
 // import { Request } from 'src/requests/entities/request.entity';
 
@@ -65,10 +65,10 @@ export class User {
   // @OneToMany(() => Request, (request) => request.user, { cascade: true })
   // requests: Request[];
   //
-  // @OneToMany(() => Notification, (notification) => notification.user, {
-  //   cascade: true,
-  // })
-  // notifications: Notification[];
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    cascade: true,
+  })
+  notifications: Notification[];
 
   @BeforeInsert()
   async beforeUserInsert() {
