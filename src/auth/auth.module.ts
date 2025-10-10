@@ -6,10 +6,13 @@ import { UserModule } from '../user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './roles.guard';
 import { AuthGuard } from './auth.guard';
+import { PassportModule } from '@nestjs/passport';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
     UserModule,
+    PassportModule.register({ session: false }),
     JwtModule.register({
       global: true,
       secret: process.env.JWTKEY,
@@ -19,6 +22,7 @@ import { AuthGuard } from './auth.guard';
   controllers: [AuthController],
   providers: [
     AuthService,
+    GoogleStrategy,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

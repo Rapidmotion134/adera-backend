@@ -16,4 +16,7 @@ export class Page {
 
   @Column('text')
   url: string;
+
+  @Column('text', { nullable: true })
+  category: 'Service Request' | 'Appointment Request' | 'Support Request';
 }

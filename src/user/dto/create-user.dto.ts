@@ -19,7 +19,5 @@ export class CreateUserDto {
   readonly password: string;
 
   readonly phone: string;
-  readonly address1: string;
-  readonly city: string;
-  readonly zipcode: string;
+  readonly address: string;
 }

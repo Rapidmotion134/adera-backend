@@ -20,6 +20,9 @@ export class Document {
   @Column('text', { nullable: true })
   type: string;
 
+  @Column('text', { nullable: true })
+  category: 'Agreement' | 'Milestone';
+
   @Column('text', { unique: true })
   productId: string;
 

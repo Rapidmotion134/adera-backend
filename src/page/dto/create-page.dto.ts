@@ -3,4 +3,5 @@ export class CreatePageDto {
   description: string;
   image: string;
   url: string;
+  category: 'Service Request' | 'Appointment Request' | 'Support Request';
 }

@@ -5,10 +5,16 @@ import {
   NotFoundException,
   HttpStatus,
   HttpCode,
+  Get,
+  UseGuards,
+  Req,
+  Res,
 } from '@nestjs/common';
+import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { Public } from './public.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -32,5 +38,24 @@ export class AuthController {
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
+  }
+
+  @Public()
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async googleAuth(@Req() req: Request) {
+    // Passport will redirect to Google login
+  }
+
+  @Public()
+  @Get('google/redirect')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const user = req['user'] as any;
+    const payload = await this.authService.login(user);
+    const jwtToken = payload.access_token;
+    const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4200';
+    return res.redirect(`${FRONTEND_URL}/dashboard?token=${jwtToken}`);
   }
 }
