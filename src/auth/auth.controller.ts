@@ -56,6 +56,12 @@ export class AuthController {
     const payload = await this.authService.login(user);
     const jwtToken = payload.access_token;
     const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4200';
-    return res.redirect(`${FRONTEND_URL}/dashboard?token=${jwtToken}`);
+    if (user.id) {
+      return res.redirect(`${FRONTEND_URL}/dashboard?token=${jwtToken}`);
+    } else {
+      return res.redirect(
+        `${FRONTEND_URL}/dashboard?new=true&token=${jwtToken}`,
+      );
+    }
   }
 }

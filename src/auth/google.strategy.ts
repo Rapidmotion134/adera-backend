@@ -22,7 +22,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/api/auth/google/redirect', // <-- Your NestJS Redirect URL
+      callbackURL: `${process.env.REDIRECT_URL}/api/auth/google/redirect`,
       scope: ['email', 'profile'],
       accessType: 'offline',
       prompt: 'consent',
@@ -55,8 +55,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         address: '',
       });
       await this.userService.create(newUser);
-    } else {
-      this.authService.login(existingUser);
     }
 
     done(null, existingUser || user);
