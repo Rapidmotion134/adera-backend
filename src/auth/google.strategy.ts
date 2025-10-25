@@ -5,8 +5,9 @@ import {
   StrategyOptions,
 } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
-import { AuthService } from './auth.service';
+// import { AuthService } from './auth.service';
 import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/entities/user.entity';
 
 interface GoogleStrategyOptions extends StrategyOptions {
   accessType?: 'offline';
@@ -16,7 +17,7 @@ interface GoogleStrategyOptions extends StrategyOptions {
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
-    private authService: AuthService,
+    // private authService: AuthService,
     private readonly userService: UserService,
   ) {
     super({
@@ -45,8 +46,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     };
 
     const existingUser = await this.userService.findByEmail(emails[0].value);
+		let newUser: User;
     if (!existingUser) {
-      const newUser = await this.userService.create({
+      	newUser = await this.userService.create({
         email: emails[0].value,
         firstName: name.givenName,
         lastName: name.familyName,
@@ -54,9 +56,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         phone: '',
         address: '',
       });
-      await this.userService.create(newUser);
+      newUser = await this.userService.create(newUser);
     }
 
-    done(null, existingUser || user);
+    done(null, existingUser || newUser);
   }
 }

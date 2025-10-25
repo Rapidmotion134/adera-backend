@@ -26,6 +26,7 @@ export class AuthService {
       isAdmin: user.isAdmin,
       isSuperAdmin: user.isSuperAdmin,
       userId: user.id,
+      registered: user.address !== null && user.phone !== null,
     };
     const token = this.jwtService.sign(payload, {
       secret: process.env.JWTKEY,

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CompleteSignupDto, UpdateUserDto } from './dto/update-user.dto';
 import { Role } from 'src/auth/enums/role.enum';
 import { Roles } from 'src/auth/role.decorator';
 
@@ -45,6 +45,13 @@ export class UserController {
   userCount() {
     return this.userService.userCount();
   }
+
+  @Roles(Role.User)
+  @Patch('completesignup/:id')
+  completeSignup(@Param('id') id: string, @Body() completeSignupDto: CompleteSignupDto) {
+    return this.userService.completeSignup(+id, completeSignupDto);
+  }
+
 
   @Roles(Role.Admin, Role.User)
   @Get(':id')
