@@ -51,6 +51,7 @@ export class UserService {
         email: 'benyamassegdw@gmail.com',
         address: 'Addis Ababa',
         isAdmin: true,
+        adminType: 'main',
       });
       await this.userRepo.save(adminUser);
       console.log('Table seeded successfully.');
@@ -67,6 +68,7 @@ export class UserService {
         email: 'benyamassegdw1@gmail.com',
         address: 'Addis Ababa',
         isAdmin: true,
+        adminType: 'main',
         isSuperAdmin: true,
       });
       await this.userRepo.save(superAdminUser);
@@ -108,10 +110,10 @@ export class UserService {
     return await this.userRepo.save(existingUser);
   }
 
-	async completeSignup(id: number, completeSignupDto: CompleteSignupDto) {
+  async completeSignup(id: number, completeSignupDto: CompleteSignupDto) {
     const existingUser = await this.findOne(id);
     Object.assign(existingUser, completeSignupDto);
-		existingUser.password = await bcrypt.hash(completeSignupDto.password, 10);
+    existingUser.password = await bcrypt.hash(completeSignupDto.password, 10);
     return await this.userRepo.save(existingUser);
   }
 

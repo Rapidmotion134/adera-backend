@@ -37,18 +37,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: VerifyCallback,
   ): Promise<any> {
     const { name, emails } = profile;
-    const user = {
-      email: emails[0].value,
-      firstName: name.givenName,
-      lastName: name.familyName,
-      accessToken,
-      refreshToken,
-    };
+    // const user = {
+    //   email: emails[0].value,
+    //   firstName: name.givenName,
+    //   lastName: name.familyName,
+    //   accessToken,
+    //   refreshToken,
+    // };
 
     const existingUser = await this.userService.findByEmail(emails[0].value);
-		let newUser: User;
+    let newUser: User;
     if (!existingUser) {
-      	newUser = await this.userService.create({
+      newUser = await this.userService.create({
         email: emails[0].value,
         firstName: name.givenName,
         lastName: name.familyName,

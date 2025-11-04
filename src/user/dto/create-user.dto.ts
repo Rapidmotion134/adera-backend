@@ -20,4 +20,5 @@ export class CreateUserDto {
 
   readonly phone: string;
   readonly address: string;
+  readonly adminType?: 'main' | 'staff' | 'supervisor';
 }

@@ -20,14 +20,27 @@ export class AuthService {
   }
 
   async login(user: User): Promise<{ access_token: string }> {
-    const payload = {
-      email: user.email,
-      sub: user.firstName,
-      isAdmin: user.isAdmin,
-      isSuperAdmin: user.isSuperAdmin,
-      userId: user.id,
-      registered: user.address !== null && user.phone !== null,
-    };
+    let payload: any = {};
+    if (user.isAdmin) {
+      payload = {
+        email: user.email,
+        sub: user.firstName,
+        isAdmin: true,
+        adminType: user.adminType,
+        isSuperAdmin: user.isSuperAdmin,
+        userId: user.id,
+        registered: true,
+      };
+    } else {
+      payload = {
+        email: user.email,
+        sub: user.firstName,
+        isAdmin: false,
+        isSuperAdmin: false,
+        userId: user.id,
+        registered: user.address !== '' && user.phone !== '',
+      };
+    }
     const token = this.jwtService.sign(payload, {
       secret: process.env.JWTKEY,
     });
