@@ -7,11 +7,7 @@ import { User } from 'src/user/entities/user.entity';
 import { Notification } from 'src/notification/entities/notification.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Document]),
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([Notification]),
-  ],
+  imports: [TypeOrmModule.forFeature([Document, User, Notification])],
   controllers: [DocumentController],
   providers: [DocumentService],
 })
