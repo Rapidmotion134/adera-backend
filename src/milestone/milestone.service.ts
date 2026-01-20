@@ -26,7 +26,7 @@ export class MilestoneService {
 
   async findForUser(userId: number) {
     return await this.milestoneRepo.find({
-      relations: ['user'],
+      relations: ['user', 'tasks'],
       where: { user: { id: userId } },
     });
   }
