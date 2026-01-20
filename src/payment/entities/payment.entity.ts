@@ -17,9 +17,6 @@ export class Payment {
   title: string;
 
   @Column('int')
-  stripeAmount: number;
-
-  @Column('int')
   amount: number;
 
   @Column('text')

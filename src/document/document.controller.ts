@@ -84,7 +84,11 @@ export class DocumentController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.documentService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.documentService.remove(+id);
+    if (result.affected === 1) {
+      return { status: 'success' };
+    }
+    return { status: 'failure' };
   }
 }

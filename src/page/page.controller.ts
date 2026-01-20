@@ -43,7 +43,11 @@ export class PageController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pageService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.pageService.remove(+id);
+    if (result.affected === 1) {
+      return { status: 'success' };
+    }
+    return { status: 'failure' };
   }
 }

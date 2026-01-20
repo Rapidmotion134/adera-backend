@@ -9,6 +9,7 @@ import * as bcrypt from 'bcryptjs';
 import { Document } from '../../document/entities/document.entity';
 import { Payment } from '../../payment/entities/payment.entity';
 import { Notification } from '../../notification/entities/notification.entity';
+import { Milestone } from '../../milestone/entities/milestone.entity';
 @Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
@@ -52,6 +53,9 @@ export class User {
 
   @OneToMany(() => Payment, (payment) => payment.user, { cascade: true })
   payments: Payment[];
+
+  @OneToMany(() => Milestone, (milestone) => milestone.user, { cascade: true })
+  milestones: Milestone[];
 
   @OneToMany(() => Notification, (notification) => notification.user, {
     cascade: true,

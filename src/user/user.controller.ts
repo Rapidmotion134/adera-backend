@@ -33,8 +33,8 @@ export class UserController {
 
   @Roles(Role.Admin)
   @Get('admins')
-  async findAllAdmins(@Req() req) {
-    if (req.user.isSuperAdmin) {
+  async findAllAdmins(@Req() req: Request) {
+    if (req['user'].isSuperAdmin) {
       return this.userService.findAllAdmins();
     }
     return new UnauthorizedException();
@@ -48,15 +48,17 @@ export class UserController {
 
   @Roles(Role.User)
   @Patch('completesignup/:id')
-  completeSignup(@Param('id') id: string, @Body() completeSignupDto: CompleteSignupDto) {
+  completeSignup(
+    @Param('id') id: string,
+    @Body() completeSignupDto: CompleteSignupDto,
+  ) {
     return this.userService.completeSignup(+id, completeSignupDto);
   }
 
-
   @Roles(Role.Admin, Role.User)
   @Get(':id')
-  findOne(@Param('id') id: string, @Req() req) {
-    if (req.user.userId === +id || req.user.isAdmin) {
+  findOne(@Param('id') id: string, @Req() req: Request) {
+    if (req['user'].userId === +id || req['user'].isAdmin) {
       return this.userService.findOne(+id);
     }
     return new UnauthorizedException();

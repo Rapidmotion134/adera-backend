@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
+import { Task } from '../../milestone/entities/task.entity';
 
 @Entity('document')
 export class Document {
@@ -44,6 +45,10 @@ export class Document {
   @ManyToOne(() => User, (user) => user.documents, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => Task, (task) => task.documents, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'task_id' })
+  task: Task;
 
   @BeforeInsert()
   async generateUniqueCode() {
