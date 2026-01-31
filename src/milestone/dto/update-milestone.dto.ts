@@ -10,4 +10,5 @@ export class UpdateMilestoneDto extends PartialType(CreateMilestoneDto) {
   tasks: Task[];
   user: User;
   admin: string;
+  status: 'pending' | 'in-progress' | 'completed';
 }

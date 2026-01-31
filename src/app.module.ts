@@ -12,6 +12,7 @@ import { PageModule } from './page/page.module';
 import { UploadController } from './upload/upload.controller';
 import { NotificationModule } from './notification/notification.module';
 import { MilestoneModule } from './milestone/milestone.module';
+import { ProjectModule } from './project/project.module';
 
 @Module({
   imports: [
@@ -20,12 +21,13 @@ import { MilestoneModule } from './milestone/milestone.module';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST,
+      url: process.env.POSTGRES_URL,
       // host: 'localhost',
       // port: 5432,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
+      // host: process.env.DB_HOST,
+      // username: process.env.DB_USERNAME,
+      // password: process.env.DB_PASSWORD,
+      // database: process.env.DB_DATABASE,
       ssl:
         process.env.NODE_ENV === 'production'
           ? { ca: readFileSync(process.env.DB_CERT_CA).toString() }
@@ -40,6 +42,7 @@ import { MilestoneModule } from './milestone/milestone.module';
     PaymentModule,
     PageModule,
     MilestoneModule,
+    ProjectModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService],

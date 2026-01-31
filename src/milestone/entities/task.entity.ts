@@ -26,7 +26,7 @@ export class Task {
   dueDate: Date;
 
   @Column('text')
-  status: 'pending' | 'in_progress' | 'completed';
+  status: 'pending' | 'in-progress' | 'completed';
 
   @ManyToOne(() => Milestone, (milestone) => milestone.tasks)
   milestone: Milestone;

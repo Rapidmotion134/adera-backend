@@ -1,4 +1,3 @@
-import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
@@ -7,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Task } from './task.entity';
+import { Project } from '../../project/entities/project.entity';
 
 @Entity('milestone')
 export class Milestone {
@@ -23,10 +23,7 @@ export class Milestone {
   dueDate: Date;
 
   @Column('text', { default: 'pending' })
-  status: 'pending' | 'in_progress' | 'completed';
-
-  @Column('text')
-  admin: string;
+  status: 'pending' | 'in-progress' | 'completed';
 
   @OneToMany(() => Task, (task) => task.milestone, {
     cascade: true,
@@ -34,6 +31,6 @@ export class Milestone {
   })
   tasks: Task[];
 
-  @ManyToOne(() => User, (user) => user.milestones)
-  user: User;
+  @ManyToOne(() => Project, (project) => project.milestones)
+  project: Project;
 }

@@ -24,7 +24,9 @@ export class Document {
   @Column('text', { nullable: true })
   category: 'Agreement' | 'Milestone';
 
-  @Column('text', { unique: true })
+  @Column('text', {
+    unique: true,
+  })
   productId: string;
 
   @Column('date', { default: () => 'CURRENT_TIMESTAMP' })

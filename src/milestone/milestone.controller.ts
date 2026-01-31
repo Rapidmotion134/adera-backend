@@ -6,8 +6,8 @@ import {
   Param,
   Patch,
   Post,
-  Req,
-  UnauthorizedException,
+  // Req,
+  // UnauthorizedException,
 } from '@nestjs/common';
 import { MilestoneService } from './milestone.service';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
@@ -37,14 +37,14 @@ export class MilestoneController {
     return this.milestoneService.findOne(+id);
   }
 
-  @Roles(Role.Admin, Role.User)
-  @Get('user/:userId')
-  findForUser(@Param('userId') userId: string, @Req() req: Request) {
-    if (req['user'].userId === +userId || req['user'].isAdmin) {
-      return this.milestoneService.findForUser(+userId);
-    }
-    return new UnauthorizedException();
-  }
+  // @Roles(Role.Admin, Role.User)
+  // @Get('user/:userId')
+  // findForUser(@Param('userId') userId: string, @Req() req: Request) {
+  //   if (req['user'].userId === +userId || req['user'].isAdmin) {
+  //     return this.milestoneService.findForUser(+userId);
+  //   }
+  //   return new UnauthorizedException();
+  // }
 
   @Roles(Role.Admin)
   @Patch(':id')
@@ -53,6 +53,25 @@ export class MilestoneController {
     @Body() updateMilestoneDto: UpdateMilestoneDto,
   ) {
     return this.milestoneService.update(+id, updateMilestoneDto);
+  }
+
+  @Roles(Role.Admin)
+  @Patch('status/:id')
+  updateStatus(
+    @Param('id') id: string,
+    @Body() updateMilestoneDto: UpdateMilestoneDto,
+  ) {
+    return this.milestoneService.updateStatus(+id, updateMilestoneDto.status);
+  }
+
+  @Roles(Role.Admin)
+  @Patch(':id/task/:taskId/status')
+  updateTaskStatus(
+    @Param('id') id: string,
+    @Param('taskId') taskId: string,
+    @Body() body: { status: 'pending' | 'in-progress' | 'completed' },
+  ) {
+    return this.milestoneService.updateTaskStatus(+id, +taskId, body.status);
   }
 
   @Roles(Role.Admin)
